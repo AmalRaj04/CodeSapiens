@@ -13,9 +13,13 @@ import {
   MessageSquare
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useAuth } from "../context/AuthContext";
+import ProfileDropdown from "./components/ProfileDropdown";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
     const handleSmoothScroll = (e: MouseEvent) => {
@@ -96,13 +100,21 @@ export default function Home() {
                   {item}
                 </a>
               ))}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-purple-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-700 transition"
-              >
-                Get Started
-              </motion.button>
+              {!isLoading && (
+                user ? (
+                  <ProfileDropdown />
+                ) : (
+                  <Link href="/login">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-purple-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-700 transition"
+                    >
+                      Login
+                    </motion.button>
+                  </Link>
+                )
+              )}
             </motion.div>
 
             {/* Mobile Menu Button */}
@@ -132,9 +144,19 @@ export default function Home() {
                   {item}
                 </a>
               ))}
-              <button className="w-full mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-700 transition">
-                Get Started
-              </button>
+              {!isLoading && (
+                user ? (
+                  <div className="w-full mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-center">
+                    <p className="text-green-700 font-medium">Welcome back, {user.name}!</p>
+                  </div>
+                ) : (
+                  <Link href="/login" className="block w-full mt-4">
+                    <button className="w-full bg-purple-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-700 transition">
+                      Login
+                    </button>
+                  </Link>
+                )
+              )}
             </motion.div>
           )}
         </div>
@@ -200,16 +222,39 @@ export default function Home() {
               Smart recommendations, resume insights, and skill growth powered by AI.
             </p>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="bg-purple-600 text-white px-10 py-4 rounded-xl font-semibold text-lg shadow-lg hover:bg-purple-700 transition-all"
-            >
-              Get Started
-            </motion.button>
+            {!isLoading && !user && (
+              <Link href="/signup">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  className="bg-purple-600 text-white px-10 py-4 rounded-xl font-semibold text-lg shadow-lg hover:bg-purple-700 transition-all"
+                >
+                  Get Started
+                </motion.button>
+              </Link>
+            )}
+
+            {user && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-lg max-w-md mx-auto"
+              >
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Welcome back, {user.name}!</h3>
+                <p className="text-gray-600 mb-6">Ready to find your next internship opportunity?</p>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full bg-purple-600 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:bg-purple-700 transition-all"
+                >
+                  Browse Internships
+                </motion.button>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </section>

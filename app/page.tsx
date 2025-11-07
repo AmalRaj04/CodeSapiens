@@ -1,16 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  Sparkles, 
-  Search, 
-  FileText, 
-  Bot, 
-  Menu, 
+import {
+  Sparkles,
+  Search,
+  FileText,
+  Bot,
+  Menu,
   X,
   Briefcase,
   TrendingUp,
-  MessageSquare
+  MessageSquare,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -22,7 +22,7 @@ export default function Home() {
   const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    const handleSmoothScroll = (e: MouseEvent) => {
+    const handleSmoothScroll = (e: Event) => {
       const target = e.target as HTMLAnchorElement;
       if (target.href && target.href.includes("#")) {
         const hash = target.href.split("#")[1];
@@ -31,19 +31,22 @@ export default function Home() {
           e.preventDefault();
           element.scrollIntoView({
             behavior: "smooth",
-            block: "start"
+            block: "start",
           });
         }
       }
     };
 
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', handleSmoothScroll);
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", handleSmoothScroll as EventListener);
     });
 
     return () => {
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.removeEventListener('click', handleSmoothScroll);
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.removeEventListener(
+          "click",
+          handleSmoothScroll as EventListener
+        );
       });
     };
   }, []);
@@ -54,18 +57,24 @@ export default function Home() {
     {
       icon: Search,
       title: "Personalized Recommendations",
-      description: "Get AI-powered internship matches tailored to your skills, interests, and career goals."
+      description:
+        "Get AI-powered internship matches tailored to your skills, interests, and career goals.",
+      link: undefined,
     },
     {
       icon: FileText,
       title: "Resume Analyzer",
-      description: "Upload your resume and receive instant feedback with actionable insights to improve it."
+      description:
+        "Upload your resume and receive instant feedback with actionable insights to improve it.",
+      link: "/resume-analyzer",
     },
     {
       icon: Bot,
       title: "AI Career Assistant",
-      description: "Get personalized career guidance, interview tips, and skill development recommendations."
-    }
+      description:
+        "Get personalized career guidance, interview tips, and skill development recommendations.",
+      link: undefined,
+    },
   ];
 
   return (
@@ -81,7 +90,9 @@ export default function Home() {
               className="flex items-center gap-2"
             >
               <Sparkles className="w-8 h-8 text-purple-600" />
-              <span className="text-2xl font-bold text-gray-900">InternConnect</span>
+              <span className="text-2xl font-bold text-gray-900">
+                InternConnect
+              </span>
             </motion.div>
 
             {/* Desktop Navigation */}
@@ -100,8 +111,8 @@ export default function Home() {
                   {item}
                 </a>
               ))}
-              {!isLoading && (
-                user ? (
+              {!isLoading &&
+                (user ? (
                   <ProfileDropdown />
                 ) : (
                   <Link href="/login">
@@ -113,8 +124,7 @@ export default function Home() {
                       Login
                     </motion.button>
                   </Link>
-                )
-              )}
+                ))}
             </motion.div>
 
             {/* Mobile Menu Button */}
@@ -122,7 +132,11 @@ export default function Home() {
               className="md:hidden p-2"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
 
@@ -144,10 +158,12 @@ export default function Home() {
                   {item}
                 </a>
               ))}
-              {!isLoading && (
-                user ? (
+              {!isLoading &&
+                (user ? (
                   <div className="w-full mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-center">
-                    <p className="text-green-700 font-medium">Welcome back, {user.name}!</p>
+                    <p className="text-green-700 font-medium">
+                      Welcome back, {user.name}!
+                    </p>
                   </div>
                 ) : (
                   <Link href="/login" className="block w-full mt-4">
@@ -155,18 +171,20 @@ export default function Home() {
                       Login
                     </button>
                   </Link>
-                )
-              )}
+                ))}
             </motion.div>
           )}
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+      <section
+        id="home"
+        className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
+      >
         {/* Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-purple-100 via-white to-blue-50" />
-        
+
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.div
@@ -178,7 +196,7 @@ export default function Home() {
             transition={{
               duration: 10,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut",
             }}
           />
           <motion.div
@@ -190,7 +208,7 @@ export default function Home() {
             transition={{
               duration: 12,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut",
             }}
           />
         </div>
@@ -219,7 +237,8 @@ export default function Home() {
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-600 mb-10 max-w-2xl mx-auto">
-              Smart recommendations, resume insights, and skill growth powered by AI.
+              Smart recommendations, resume insights, and skill growth powered
+              by AI.
             </p>
 
             {!isLoading && !user && (
@@ -244,8 +263,12 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.5 }}
                 className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-lg max-w-md mx-auto"
               >
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Welcome back, {user.name}!</h3>
-                <p className="text-gray-600 mb-6">Ready to find your next internship opportunity?</p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Welcome back, {user.name}!
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Ready to find your next internship opportunity?
+                </p>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -280,7 +303,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {features.map((feature, index) => {
               const Icon = feature.icon;
-              return (
+              const CardContent = (
                 <motion.div
                   key={feature.title}
                   initial={{ opacity: 0, y: 30 }}
@@ -288,7 +311,7 @@ export default function Home() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.2 }}
                   whileHover={{ y: -5 }}
-                  className="p-8 bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl border border-purple-100 hover:shadow-lg transition-all"
+                  className="p-8 bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl border border-purple-100 hover:shadow-lg transition-all cursor-pointer"
                 >
                   <div className="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center mb-6">
                     <Icon className="w-7 h-7 text-white" />
@@ -301,13 +324,24 @@ export default function Home() {
                   </p>
                 </motion.div>
               );
+
+              return feature.link ? (
+                <Link key={feature.title} href={feature.link}>
+                  {CardContent}
+                </Link>
+              ) : (
+                CardContent
+              );
             })}
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-gradient-to-b from-white to-purple-50">
+      <section
+        id="about"
+        className="py-20 bg-gradient-to-b from-white to-purple-50"
+      >
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -321,11 +355,14 @@ export default function Home() {
                   About InternConnect
                 </h2>
                 <p className="text-lg text-gray-600 mb-4 leading-relaxed">
-                  We're revolutionizing how students find internships by harnessing the power of artificial intelligence. 
-                  Our platform analyzes your skills, interests, and career goals to match you with the perfect opportunities.
+                  We're revolutionizing how students find internships by
+                  harnessing the power of artificial intelligence. Our platform
+                  analyzes your skills, interests, and career goals to match you
+                  with the perfect opportunities.
                 </p>
                 <p className="text-lg text-gray-600 mb-4 leading-relaxed">
-                  With advanced resume analysis and personalized recommendations, we help you stand out in the competitive 
+                  With advanced resume analysis and personalized
+                  recommendations, we help you stand out in the competitive
                   internship market and accelerate your career journey.
                 </p>
               </motion.div>
@@ -381,42 +418,80 @@ export default function Home() {
                   Your AI-powered gateway to the perfect internship.
                 </p>
               </div>
-              
+
               <div>
                 <h4 className="font-semibold mb-4">Platform</h4>
                 <ul className="space-y-2 text-gray-400">
-                  <li><a href="#" className="hover:text-white transition">How It Works</a></li>
-                  <li><a href="#" className="hover:text-white transition">Pricing</a></li>
-                  <li><a href="#" className="hover:text-white transition">Success Stories</a></li>
+                  <li>
+                    <a href="#" className="hover:text-white transition">
+                      How It Works
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-white transition">
+                      Pricing
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-white transition">
+                      Success Stories
+                    </a>
+                  </li>
                 </ul>
               </div>
 
               <div>
                 <h4 className="font-semibold mb-4">Resources</h4>
                 <ul className="space-y-2 text-gray-400">
-                  <li><a href="#" className="hover:text-white transition">Blog</a></li>
-                  <li><a href="#" className="hover:text-white transition">Career Tips</a></li>
-                  <li><a href="#" className="hover:text-white transition">FAQ</a></li>
+                  <li>
+                    <a href="#" className="hover:text-white transition">
+                      Blog
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-white transition">
+                      Career Tips
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-white transition">
+                      FAQ
+                    </a>
+                  </li>
                 </ul>
               </div>
 
               <div>
                 <h4 className="font-semibold mb-4">Connect</h4>
                 <ul className="space-y-2 text-gray-400">
-                  <li><a href="#" className="hover:text-white transition">Contact Us</a></li>
-                  <li><a href="#" className="hover:text-white transition">Twitter</a></li>
-                  <li><a href="#" className="hover:text-white transition">LinkedIn</a></li>
+                  <li>
+                    <a href="#" className="hover:text-white transition">
+                      Contact Us
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-white transition">
+                      Twitter
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-white transition">
+                      LinkedIn
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
 
             <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-              <p>&copy; {new Date().getFullYear()} InternConnect. All rights reserved.</p>
+              <p>
+                &copy; {new Date().getFullYear()} InternConnect. All rights
+                reserved.
+              </p>
             </div>
           </div>
         </div>
       </footer>
-
     </main>
   );
 }
